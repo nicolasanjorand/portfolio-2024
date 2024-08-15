@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
+import localFont from 'next/font/local'
+import SmoothScrolling from "@/components/smoothScroll";
+import GrainBackground from "@/components/grain";
 
-const inter = Inter({ subsets: ["latin"] });
+
+
+const myFont = localFont({ src: '../public/fonts/GeneralSans-Medium.woff2' })
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +20,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={myFont.className}>
+        <GrainBackground/>
+
+        <SmoothScrolling>{children}</SmoothScrolling>
+      </body>
     </html>
   );
 }

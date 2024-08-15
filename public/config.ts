@@ -1,0 +1,1 @@
+export const loadingDuration = 1000;
