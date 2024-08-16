@@ -15,6 +15,8 @@ import Works from "@/components/works";
 import LoadingPage from "@/components/loadingPage";
 import {loadingDuration} from "@/public/config";
 import MainImage from "@/public/main.jpg";
+import SecondImage from "@/public/IMG_2004.jpg";
+
 import localFont from "next/font/local";
 import classNames from "classnames";
 import SplitText from "@/components/ui/splitText";
@@ -79,18 +81,20 @@ export default function Home() {
     const [showMenu, setShowMenu] = useState(false);
 
     useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY > window.innerHeight - (window.innerHeight * 0.05)) {
-                setShowMenu(true);
-            } else {
-                setShowMenu(false);
-            }
-        };
+        if (typeof window !== "undefined") {
+            const handleScroll = () => {
+                if (window.scrollY > window.innerHeight - (window.innerHeight * 0.05)) {
+                    setShowMenu(true);
+                } else {
+                    setShowMenu(false);
+                }
+            };
+            window.addEventListener('scroll', handleScroll);
+            return () => {
+                window.removeEventListener('scroll', handleScroll);
+            };
+        }
 
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
     }, []);
 
     const variants = {
@@ -122,7 +126,7 @@ export default function Home() {
     const landing = {
         loading: {
         }, loaded:{
-            y: -window.innerHeight,
+            y: typeof window !== "undefined" ? -window.innerHeight : 0,
             transition: {duration: 0, ease: [0.76, 0, 0.24, 1]}
         }
     }
@@ -146,6 +150,7 @@ export default function Home() {
             <Page1 setIsHovered={setIsHovered} scrollYProgress={scrollYProgress} isLoaded={isLoaded}></Page1>
             <About setIsHovered={setIsHovered} scrollYProgress={scrollYProgress}></About>
         </motion.div>
+        <About2/>
         <motion.div
             initial="closed"
             animate={showMenu ? 'open' : 'closed' }
@@ -201,7 +206,7 @@ const Page1 = ({scrollYProgress, setIsHovered, isLoaded}) => {
             scrollTrigger: {
                 trigger: document.documentElement,
                 start: 0,
-                end: window.innerHeight,
+                end: typeof window !== "undefined" ? window.innerHeight : 0,
                 scrub: 0.25,
                 onUpdate: e => direction = e.direction * -1
             },
@@ -272,7 +277,7 @@ const Page1 = ({scrollYProgress, setIsHovered, isLoaded}) => {
                 <p className="text-[155px] text-colored title">ANJORAND</p>
             </div>*/}
             <div className="w-full flex flex-row justify-around items-center">
-                <motion.p transition={{duration: 0.5, ease: [0.76, 0, 0.24, 1], delay:0.7}} initial="loading" animate={isLoaded ? 'loaded' : 'loading' } variants={landingAnimations} className="text-colored w-80">A full-stack and mobile developer with an eye for <span className="text-dark font-bold">cool motion interfaces</span>.</motion.p>
+                <motion.p transition={{duration: 0.5, ease: [0.76, 0, 0.24, 1], delay:0.7}} initial="loading" animate={isLoaded ? 'loaded' : 'loading' } variants={landingAnimations} className="text-colored w-80">A full-stack and mobile developer with an eye for <span className="text-dark font-bold">nice motioned interfaces</span>.</motion.p>
                 <motion.p transition={{duration: 0.5, ease: [0.76, 0, 0.24, 1], delay:0.8}} initial="loading" animate={isLoaded ? 'loaded' : 'loading' } variants={landingAnimations} className="text-dark">( Scroll if you dare )</motion.p>
             </div>
         </motion.div>
@@ -297,7 +302,6 @@ const About = ({scrollYProgress, setIsHovered}) => {
                 <SplitText text="ABOUT ME" className="text-light text-[25px]" />
             </div>
             <TextCarousel scrollYProgress={carouselProgress}/>
-            <SplitText delay={0.12} text="A frenchie in Seattle, searching for a job where I can create amazing digital experiences." className="text-[30px] text-light text-right" />
             {/*<div className="w-full h-full py-20 flex justify-center items-center flex-row">
                 <div className="flex flex-col justify-around items-end h-full w-full">
                     <SplitText delay={0.12} text="A frenchie in Seattle, searching for a job where I can create amazing digital experiences." className="text-[30px] text-colored text-right" />
@@ -319,11 +323,21 @@ const About = ({scrollYProgress, setIsHovered}) => {
     )
 }
 
+const About2 = () => {
+    return (
+        <motion.div className="w-full px-20 bg-dark h-[60vh] relative flex justify-around items-center flex-row gap-5">
+            <Image className="w-auto h-full z-20" src={SecondImage} alt="Illustration showing Nicolas ANJORAND on a beach"/>
+            <SplitText delay={0.12} text="A frenchie in Seattle, searching for a job where I can create amazing digital experiences." className="text-[50px] text-colored text-right" />
+
+        </motion.div>
+    )
+}
+
 
 const Page2 = ({scrollYProgress, setIsHovered, setHoveredText}) => {
 
     return (
-        <motion.div className="w-full p-12 bg-dark relative">
+        <motion.div className="w-full p-12 bg-dark relative mt-20">
             <div className="flex flex-row justify-between px-10 w-full">
                 <SplitText text="WHAT I USE" className="text-light text-[25px]" />
             </div>

@@ -12,7 +12,7 @@ export default function Scene({isLoaded}){
     const landingAnimations = {
         loading: {
             opacity: 1,
-            translateY: -window.innerHeight,
+            translateY: typeof window !== "undefined" ? -window.innerHeight : 0,
         }, loaded:{
             opacity: 1,
             translateY: 0,

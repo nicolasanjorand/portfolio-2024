@@ -34,13 +34,17 @@ const Magnet = ({ children, padding = 100, disabled = false }) => {
             }
         };
 
-        // Attach mouse move event listener
-        window.addEventListener("mousemove", handleMouseMove);
+        if (typeof window !== "undefined") {
+            // Attach mouse move event listener
+            window.addEventListener("mousemove", handleMouseMove);
 
-        // Clean up event listener on component unmount
-        return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
-        };
+            // Clean up event listener on component unmount
+            return () => {
+                window.removeEventListener("mousemove", handleMouseMove);
+            };
+        }
+
+
     }, [padding, disabled]);
 
     return (

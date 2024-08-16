@@ -70,7 +70,7 @@ export default function WorkCard({setIsHovered, title, description, badges, src,
         <div key={i} className="flex justify-center items-start sticky top-0 mt-20">
             <motion.div
                 ref={containerRef}
-                className='bg-dark w-[90%] origin-top' style={{ marginTop: `${i * 80}px`, height: i == 0 ? '200vh' : '100vh' }}>
+                className='bg-dark w-[90%] origin-top' style={{ marginTop: `${i * 80}px`, height: i == 0 ? '300vh' : '100vh' }}>
                 <div className="top-0 sticky" >
                     <p className="flex flex-row items-center">
                         <SplitText text={"0" + (i+1).toString() } className="text-[64px] text-colored uppercase text-left" />

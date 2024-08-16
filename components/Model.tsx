@@ -22,7 +22,7 @@ export default function Model() {
 
     useEffect(() => {
         const handleMouseMove = (event) => {
-            const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            const mouseX = (event.clientX /  window.innerWidth) * 2 - 1;
             const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
 
             if (torus.current) {
