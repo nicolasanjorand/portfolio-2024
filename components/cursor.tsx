@@ -67,7 +67,8 @@ export default function Cursor({isHovered,isArrowed, hoveredText}) {
                 backgroundColor: hoveredText != '' ? 'transparent' : '#F3EEEA',
                 borderColor: 'white',
                 borderStyle: 'solid',
-                transition: 'height 0.3s ease-out, width 0.3s ease-out'
+                transition: 'height 0.3s ease-out, width 0.3s ease-out',
+                mixBlendMode: isArrowed ? 'normal' : 'difference',
         }}
         >
             {

@@ -5,7 +5,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from 'split-type'
 import React, {useEffect, useRef, useState} from "react";
 import Cursor from "@/components/cursor";
-import Scene from "@/components/scene";
 import WhatIUse from "@/components/whatUse";
 import Menu from "@/components/header/menu";
 import {useScroll, useTransform, motion} from "framer-motion";
@@ -16,7 +15,6 @@ import LoadingPage from "@/components/loadingPage";
 import {loadingDuration} from "@/public/config";
 import MainImage from "@/public/main.jpg";
 import SecondImage from "@/public/IMG_2004.jpg";
-
 import localFont from "next/font/local";
 import classNames from "classnames";
 import SplitText from "@/components/ui/splitText";
@@ -25,6 +23,7 @@ import BlurReveal from "@/components/ui/blurReveal";
 import StaggerHoverText from "@/components/staggerHoverText";
 import Magnet from "@/components/ui/magnet";
 import TextCarousel from "@/components/textCarousel";
+import Button from "@/components/ui/button";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,40 +35,13 @@ export default function Home() {
     const [isCursorArrowed, setIsCursorArrowed] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
     const [isLoaded, setIsLoaded] = useState(false)
+    const [isMobileLoaded, setIsMobileLoaded] = useState(false)
 
 
     gsap.config({ trialWarn: false });
     console.clear();
     gsap.registerPlugin(ScrollTrigger, SplitType);
 
-    useEffect(() => {
-        const splitTypes = document.querySelectorAll('.what-i-use')
-        /*splitTypes.forEach((char,i) => {
-            const text = new SplitType(char, {
-                types: 'chars'
-            })
-
-            gsap.from(text.chars, {
-                scrollTrigger: {
-                    trigger: char,
-                    start: 'top 90%',
-                    end: 'top 10%',
-                    scrub: false,
-                    markers: false,
-                    toggleActions: "play reverse play reverse",
-                    onLeave: () => gsap.set(text.chars, { opacity: 1, scaleY: 1, y: 0 }), // Keep the text visible
-                    onEnterBack: () => gsap.to(text.chars, { opacity: 1, scaleY: 1, y: 0, stagger: 0.01, duration: 1, ease: "power3.inOut" }), // Reappear on scrolling back up
-                },
-                opacity: 0,
-                scaleY: 0,
-                transformOrigin: 'top',
-                y: -20,
-                stagger: 0.01,
-                duration: 1,
-                ease: "power3.inOut"
-            })
-        })*/
-    }, []);
 
 
     const container = useRef();
@@ -115,6 +87,7 @@ export default function Home() {
     })
 
     useEffect(() => {
+        setIsMobileLoaded(true)
         setTimeout(function (){
             setIsLoading(false)
         }, loadingDuration);
@@ -131,48 +104,93 @@ export default function Home() {
         }
     }
 
+    if(typeof document !== 'undefined'){
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const target = document.querySelector(this.getAttribute('href'));
+
+                target.scrollIntoView({
+                    behavior: 'smooth'
+                });
+
+                history.pushState(null, null, this.getAttribute('href'));
+            });
+        });
+    }
 
 
+    const landingAnimations = {
+        loading: {
+            opacity: 0,
+            translateY: -20,
+        }, loaded:{
+            opacity: 1,
+            translateY: 0,
+        }
+    }
 
 
 
   return (
-    <main style={ !isLoaded ? {overflow: 'hidden', height: '100vh', position: 'relative'} : {}}>
-        <motion.div
-            initial="loading"
-            animate={isLoaded ? 'loaded' : 'loading' }
-            variants={landing}
-            className="h-screen w-screen absolute z-50"
-        >
-            <LoadingPage isLoading={isLoading} setIsLoading={setIsLoading} isLoaded={isLoaded}/>
-        </motion.div>
-        <motion.div transition={{duration: 1, ease: [0.76, 0, 0.24, 1], delay: 1}} ref={container} className="relative h-200vh" animate={ isLoaded ? {padding: 24} : {padding: 0}}>
-            <Page1 setIsHovered={setIsHovered} scrollYProgress={scrollYProgress} isLoaded={isLoaded}></Page1>
-            <About setIsHovered={setIsHovered} scrollYProgress={scrollYProgress}></About>
-        </motion.div>
-        <About2/>
-        <motion.div
-            initial="closed"
-            animate={showMenu ? 'open' : 'closed' }
-            variants={variants}
-            style={{
-                position: 'fixed',
-                top: '40px',
-                right: '20px',
-                zIndex: 50,
-                transformOrigin: 'center'
-            }}
-        >
-            <Menu setIsHovered={setIsHovered} setIsLoaded={setIsLoaded}/>
-        </motion.div>
+    <main>
+        <div className="md:hidden w-screen h-screen flex justify-between items-center flex-col p-5">
+            <div className="bg-light w-full h-full flex justify-between items-center flex-col py-10 rounded-2xl">
+                <motion.p className="text-dark" initial="loading" animate={isMobileLoaded ? 'loaded' : 'loading' } variants={landingAnimations}>Nicolas.A</motion.p>
+                <div className="flex flex-col justify-between items-center px-3 w-full gap-6">
+                    <motion.p className="text-colored w-full text-center" initial="loading" animate={isMobileLoaded ? 'loaded' : 'loading' } variants={landingAnimations}>This portfolio is designed for laptop/desktop devices only to show the best experience.</motion.p>
+                    <motion.a transition={{duration: 0.5, ease: [0.76, 0, 0.24, 1], delay:0.3}} initial="loading" animate={isMobileLoaded ? 'loaded' : 'loading' } variants={landingAnimations} href="/NICOLAS_ANJORAND.pdf" target="_blank"><span className="px-4 py-4 bg-dark rounded-xl text-light">DOWNLOAD MY RESUME</span></motion.a>
+                </div>
+                <div className="flex flex-col justify-center items-center gap-2">
+                    <motion.a transition={{duration: 0.5, ease: [0.76, 0, 0.24, 1], delay:0.3}} initial="loading" animate={isMobileLoaded ? 'loaded' : 'loading' } variants={landingAnimations} className="group cursor-pointer" href="mailto:hello@nicolasanjorand.com" onMouseEnter={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}}>
+                        <p className="text-dark underline">hello@nicolasanjorand.com</p>
+                    </motion.a>
+                    <motion.p transition={{duration: 0.5, ease: [0.76, 0, 0.24, 1], delay:0.2}} className="text-colored group" initial="loading" animate={isMobileLoaded ? 'loaded' : 'loading' } variants={landingAnimations}>AVAILABLE FOR WORK OCTOBER 2025</motion.p>
 
-        <Page2 setIsHovered={setIsHovered} scrollYProgress={scrollYProgress} setHoveredText={setHoveredText}></Page2>
-        <div ref={workContactPage}>
-            <Works setIsHovered={setIsHovered} setIsArrowed={setIsCursorArrowed} ref={workContactPage}/>
-            <Contact setIsHovered={setIsHovered} scrollYProgress={scrollYProgressContact}/>
+                </div>
+
+            </div>
         </div>
-        <Footer setIsHovered={setIsHovered}/>
-        <Cursor isHovered={isHovered} isArrowed={isCursorArrowed} hoveredText={hoveredText}></Cursor>
+
+        <div style={ !isLoaded ? {overflow: 'hidden', height: '100vh', position: 'relative'} : {}} className="hidden md:block">
+            <motion.div
+                initial="loading"
+                animate={isLoaded ? 'loaded' : 'loading' }
+                variants={landing}
+                className="h-screen w-screen absolute z-50"
+            >
+                <LoadingPage isLoading={isLoading} setIsLoading={setIsLoading} isLoaded={isLoaded}/>
+            </motion.div>
+            <motion.div id="home" transition={{duration: 1, ease: [0.76, 0, 0.24, 1], delay: 1}} ref={container} className="relative h-200vh" animate={ isLoaded ? {padding: 24} : {padding: 0}}>
+                <Page1 setIsHovered={setIsHovered} scrollYProgress={scrollYProgress} isLoaded={isLoaded}></Page1>
+                <About setIsHovered={setIsHovered} scrollYProgress={scrollYProgress}></About>
+            </motion.div>
+            <About2 setIsHovered={setIsHovered}/>
+            <motion.div
+                initial="closed"
+                animate={showMenu ? 'open' : 'closed' }
+                variants={variants}
+                style={{
+                    position: 'fixed',
+                    top: '40px',
+                    right: '20px',
+                    zIndex: 50,
+                    transformOrigin: 'center'
+                }}
+            >
+                <Menu setIsHovered={setIsHovered} setIsLoaded={setIsLoaded}/>
+            </motion.div>
+
+            <Page2 setIsHovered={setIsHovered} scrollYProgress={scrollYProgress} setHoveredText={setHoveredText}></Page2>
+            <div ref={workContactPage}>
+                <Works setIsHovered={setIsHovered} setIsArrowed={setIsCursorArrowed} ref={workContactPage}/>
+                <Contact setIsHovered={setIsHovered} scrollYProgress={scrollYProgressContact}/>
+            </div>
+            <Footer setIsHovered={setIsHovered}/>
+            <Cursor isHovered={isHovered} isArrowed={isCursorArrowed} hoveredText={hoveredText}></Cursor>
+        </div>
+
     </main>
   );
 }
@@ -230,8 +248,6 @@ const Page1 = ({scrollYProgress, setIsHovered, isLoaded}) => {
 
     return (
         <motion.div style={{scale, rotate}} className="w-full h-screen flex justify-between p-12 flex-col items-center bg-light sticky top-0" transition={{duration: 1, ease: [0.76, 0, 0.24, 1], delay: 1}} animate={ isLoaded ? {borderRadius: 16} : {padding: 0}}>
-            {/*<Scene isLoaded={isLoaded}>
-            </Scene>*/}
             <div className="w-full h-full flex justify-center items-center absolute mb-20 pointer-events-none overflow-hidden">
                 <div className="absolute rotate-z-12">
                     <div ref={slider} className={classNames(harmond.className, "relative whitespace-nowrap flex")}>
@@ -239,12 +255,6 @@ const Page1 = ({scrollYProgress, setIsHovered, isLoaded}) => {
                         <motion.p transition={{duration: 0.5, ease: [0.76, 0, 0.24, 1], delay:1}} initial="loading" animate={isLoaded ? 'loaded' : 'loading' } variants={landingAnimations} ref={secondText} className="text-[240px] absolute left-full"> Nicolas ANJORAND . </motion.p>
                     </div>
                 </div>
-                {/*<div className="absolute -rotate-z-12">
-                    <div ref={slider2} className={classNames(harmond.className, "relative whitespace-nowrap flex")}>
-                        <p ref={firstText2} className="text-[140px]">Nicolas ANJORAND - </p>
-                        <p ref={secondText2} className="text-[140px] absolute left-full">Nicolas ANJORAND - </p>
-                    </div>
-                </div>*/}
             </div>
             <div className="flex flex-row justify-between px-10 w-full">
                 <motion.p className="text-dark" initial="loading" animate={isLoaded ? 'loaded' : 'loading' } variants={landingAnimations}>Nicolas.A</motion.p>
@@ -264,21 +274,14 @@ const Page1 = ({scrollYProgress, setIsHovered, isLoaded}) => {
                 <Image className="w-auto h-full z-20" src={MainImage} alt="Illustration showing Nicolas ANJORAND on a beach"/>
 
             </motion.div>
-
-
-            {/*<div className="flex justify-center items-end flex-col self-end text-colored">
-                <motion.a transition={{duration: 0.5, ease: [0.76, 0, 0.24, 1], delay:0.4}} initial="loading" animate={isLoaded ? 'loaded' : 'loading' } variants={landingAnimations} href="/#about" className="group" onMouseEnter={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}}><PerspectiveText textColor="text-dark" label="ABOUT"></PerspectiveText></motion.a>
-                <motion.a transition={{duration: 0.5, ease: [0.76, 0, 0.24, 1], delay:0.45}} initial="loading" animate={isLoaded ? 'loaded' : 'loading' } variants={landingAnimations} href="/#skills" className="group" onMouseEnter={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}}><PerspectiveText textColor="text-dark" label="SKILLS"></PerspectiveText></motion.a>
-                <motion.a transition={{duration: 0.5, ease: [0.76, 0, 0.24, 1], delay:0.5}} initial="loading" animate={isLoaded ? 'loaded' : 'loading' } variants={landingAnimations} href="/#works" className="group" onMouseEnter={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}}><PerspectiveText textColor="text-dark" label="WORKS"></PerspectiveText></motion.a>
-                <motion.a transition={{duration: 0.5, ease: [0.76, 0, 0.24, 1], delay:0.55}} initial="loading" animate={isLoaded ? 'loaded' : 'loading' } variants={landingAnimations} href="/#contact" className="group" onMouseEnter={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}}><PerspectiveText textColor="text-dark" label="CONTACT"></PerspectiveText></motion.a>
-            </div>*/}
-            {/*<div className="flex justify-center items-center flex-col" onMouseEnter={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}}>
-                <p id="test" className="text-[155px] leading-10 text-dark title">NICOLAS</p>
-                <p className="text-[155px] text-colored title">ANJORAND</p>
-            </div>*/}
             <div className="w-full flex flex-row justify-around items-center">
                 <motion.p transition={{duration: 0.5, ease: [0.76, 0, 0.24, 1], delay:0.7}} initial="loading" animate={isLoaded ? 'loaded' : 'loading' } variants={landingAnimations} className="text-colored w-80">A full-stack and mobile developer with an eye for <span className="text-dark font-bold">nice motioned interfaces</span>.</motion.p>
-                <motion.p transition={{duration: 0.5, ease: [0.76, 0, 0.24, 1], delay:0.8}} initial="loading" animate={isLoaded ? 'loaded' : 'loading' } variants={landingAnimations} className="text-dark">( Scroll if you dare )</motion.p>
+                <Magnet padding={20}><motion.p transition={{duration: 0.5, ease: [0.76, 0, 0.24, 1], delay:0.8}} initial="loading" animate={isLoaded ? 'loaded' : 'loading' } variants={landingAnimations} className="text-dark flex flex-row group">( Scroll down if you dare
+                    <svg className="size-6 group-hover:rotate-y-180 duration-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+                    </svg>
+                    <span>)</span>
+                </motion.p></Magnet>
             </div>
         </motion.div>
     )
@@ -297,37 +300,25 @@ const About = ({scrollYProgress, setIsHovered}) => {
 
 
     return (
-        <motion.div ref={container} style={{scale, rotate}} className="w-full p-12 bg-dark h-screen relative flex justify-around items-center flex-col rounded-2xl overflow-hidden">
+        <motion.div id="about" ref={container} style={{scale, rotate}} className="w-full p-12 bg-dark h-screen relative flex justify-around items-center flex-col rounded-2xl overflow-hidden">
             <div className="flex flex-row justify-between px-10 w-full">
                 <SplitText text="ABOUT ME" className="text-light text-[25px]" />
             </div>
             <TextCarousel scrollYProgress={carouselProgress}/>
-            {/*<div className="w-full h-full py-20 flex justify-center items-center flex-row">
-                <div className="flex flex-col justify-around items-end h-full w-full">
-                    <SplitText delay={0.12} text="A frenchie in Seattle, searching for a job where I can create amazing digital experiences." className="text-[30px] text-colored text-right" />
-                    <div className="flex flex-row gap-2 self-start ml-10">
-                        <div className="relative overflow-hidden h-[200px]">
-                            <p className="text-right text-light vertical-carousel">FULL-STACK</p>
-                            <p className="text-right text-light vertical-carousel">CREATIVE</p>
-                            <p className="text-right text-light vertical-carousel">FRONT-END</p>
-                            <p className="text-right text-light vertical-carousel">BACK-END</p>
-                        </div>
-                        <p className="text-light font-black">DEVELOPER</p>
-                    </div>
-                </div>
-
-
-            </div>*/}
-
         </motion.div>
     )
 }
 
-const About2 = () => {
+const About2 = ({setIsHovered}) => {
+
+
     return (
         <motion.div className="w-full px-20 bg-dark h-[60vh] relative flex justify-around items-center flex-row gap-5">
             <Image className="w-auto h-full z-20" src={SecondImage} alt="Illustration showing Nicolas ANJORAND on a beach"/>
-            <SplitText delay={0.12} text="A frenchie in Seattle, searching for a job where I can create amazing digital experiences." className="text-[50px] text-colored text-right" />
+            <div className="flex justify-around gap-10 items-end flex-col">
+                <SplitText delay={0.12} text="A frenchie in Seattle, searching for a job where I can create amazing digital experiences." className="text-[50px] text-colored text-right" />
+                <a href="/NICOLAS_ANJORAND.pdf" target="_blank"><Button className="" text="MY RESUME" setIsHovered={setIsHovered}></Button></a>
+            </div>
 
         </motion.div>
     )
@@ -337,7 +328,7 @@ const About2 = () => {
 const Page2 = ({scrollYProgress, setIsHovered, setHoveredText}) => {
 
     return (
-        <motion.div className="w-full p-12 bg-dark relative mt-20">
+        <motion.div id="skills" className="w-full p-12 bg-dark relative mt-20">
             <div className="flex flex-row justify-between px-10 w-full">
                 <SplitText text="WHAT I USE" className="text-light text-[25px]" />
             </div>
@@ -381,7 +372,7 @@ const Contact = ({setIsHovered, scrollYProgress}) => {
 
 
     return (
-        <div>
+        <div id="contact">
             <motion.div style={{scaleY}} className="bg-dark w-full h-full absolute z-[51] origin-top"></motion.div>
             <motion.div style={{scaleX}} className="w-full p-12 bg-light h-screen relative z-50 ">
                 <div className="flex flex-row justify-between px-10 w-full">
@@ -390,19 +381,19 @@ const Contact = ({setIsHovered, scrollYProgress}) => {
                 <div className="flex justify-around items-center flex-row w-full h-full">
                     <SplitText delay={0.07} text="I’m would be glad to read about your project or any idea you want to talk about." className="text-[64px] text-dark w-[600px] leading-[70px]"  />
                     <div className="flex flex-col h-[50%]  justify-between pl-20">
-                        <p>to :
+                        <div>to :
                             <a className="group cursor-pointer" href="mailto:hello@nicolasanjorand.com" onMouseEnter={() => {setIsHovered(true)}} onMouseLeave={() => {setIsHovered(false)}}>
-                                <p className="text-dark text-4xl">hello@nicolasanjorand.com</p>
+                                <span className="text-dark text-4xl">hello@nicolasanjorand.com</span>
                                 <div className="w-full mt-2 group-hover:w-0 bg-dark h-1 transition-all duration-500"></div>
                             </a>
-                        </p>
+                        </div>
                         <div>
                             <p className="text-colored">SOCIALS</p>
                             <div className="flex flex-row gap-10" >
-                                <a className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="LINKEDIN"></PerspectiveText></a>
-                                <a className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="AWWWARDS"></PerspectiveText></a>
-                                <a className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="MALT"></PerspectiveText></a>
-                                <a className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="GITHUB"></PerspectiveText></a>
+                                <a target="_blank" href="https://www.linkedin.com/in/nicolasanjorand/" className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="LINKEDIN"></PerspectiveText></a>
+                                <a target="_blank" href="https://www.awwwards.com/nicolas-anjorand/" className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="AWWWARDS"></PerspectiveText></a>
+                                <a target="_blank" href="https://www.malt.fr/profile/nicolasanjorand" className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="MALT"></PerspectiveText></a>
+                                <a target="_blank" href="https://github.com/nicolasanjorand" className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="GITHUB"></PerspectiveText></a>
                             </div>
                         </div>
                     </div>
@@ -430,20 +421,20 @@ const Footer = ({setIsHovered}) => {
             <div className="flex flex-col justify-center items-start">
                 <p className="text-xs">SECTIONS</p>
                 <div className="w-48 h-[1px] bg-dark mt-3"></div>
-                <a className="uppercase text-xs group cursor-pointer mt-3"><PerspectiveText textColor="text-dark" label="HOME"></PerspectiveText></a>
-                <a className="uppercase text-xs group cursor-pointer"><PerspectiveText textColor="text-dark" label="ABOUT"></PerspectiveText></a>
-                <a className="uppercase text-xs group cursor-pointer"><PerspectiveText textColor="text-dark" label="SKILLS"></PerspectiveText></a>
-                <a className="uppercase text-xs group cursor-pointer"><PerspectiveText textColor="text-dark" label="WORKS"></PerspectiveText></a>
-                <a className="uppercase text-xs group cursor-pointer"><PerspectiveText textColor="text-dark" label="CONTACT"></PerspectiveText></a>
+                <a href="#home" className="uppercase text-xs group cursor-pointer mt-3"><PerspectiveText textColor="text-dark" label="HOME"></PerspectiveText></a>
+                <a href="#about" className="uppercase text-xs group cursor-pointer"><PerspectiveText textColor="text-dark" label="ABOUT"></PerspectiveText></a>
+                <a href="#skills" className="uppercase text-xs group cursor-pointer"><PerspectiveText textColor="text-dark" label="SKILLS"></PerspectiveText></a>
+                <a href="#works" className="uppercase text-xs group cursor-pointer"><PerspectiveText textColor="text-dark" label="WORKS"></PerspectiveText></a>
+                <a href="#contact" className="uppercase text-xs group cursor-pointer"><PerspectiveText textColor="text-dark" label="CONTACT"></PerspectiveText></a>
             </div>
 
             <div className="flex flex-col justify-center items-start">
                 <p className="text-xs">SOCIALS</p>
                 <div className="w-48 h-[1px] bg-dark mt-3"></div>
-                <a className="uppercase text-xs group cursor-pointer mt-3"><PerspectiveText textColor="text-dark" label="LINKEDIN"></PerspectiveText></a>
-                <a className="uppercase text-xs group cursor-pointer"><PerspectiveText textColor="text-dark" label="AWWWARDS"></PerspectiveText></a>
-                <a className="uppercase text-xs group cursor-pointer"><PerspectiveText textColor="text-dark" label="MALT"></PerspectiveText></a>
-                <a className="uppercase text-xs group cursor-pointer"><PerspectiveText textColor="text-dark" label="GITHUB"></PerspectiveText></a>
+                <a target="_blank" href="https://www.linkedin.com/in/nicolasanjorand/" className="uppercase text-xs group cursor-pointer mt-3"><PerspectiveText textColor="text-dark" label="LINKEDIN"></PerspectiveText></a>
+                <a target="_blank" href="https://www.awwwards.com/nicolas-anjorand/" className="uppercase text-xs group cursor-pointer"><PerspectiveText textColor="text-dark" label="AWWWARDS"></PerspectiveText></a>
+                <a target="_blank" href="https://www.malt.fr/profile/nicolasanjorand" className="uppercase text-xs group cursor-pointer"><PerspectiveText textColor="text-dark" label="MALT"></PerspectiveText></a>
+                <a target="_blank" href="https://github.com/nicolasanjorand" className="uppercase text-xs group cursor-pointer"><PerspectiveText textColor="text-dark" label="GITHUB"></PerspectiveText></a>
             </div>
 
             <p className="text-xs text-colored mt-10">Designed and developed by Nicolas ANJORAND, using Figma and NextJS (Typescript, Tailwind). </p>

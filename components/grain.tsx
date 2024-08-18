@@ -19,7 +19,7 @@ export default function GrainBackground() {
 
 
     return (
-        <div className="w-screen h-screen z-[53] fixed opacity-10 pointer-events-none">
+        <div className="w-screen h-screen z-[53] fixed opacity-10 pointer-events-none hidden md:block">
             {currentSvg === 0 && (
                 <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
                     <defs>

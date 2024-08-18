@@ -4,7 +4,7 @@ import { useAnimation, motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import classNames from "classnames";
 
-const Title = styled.h2`
+const Title = styled.span`
 
 `;
 

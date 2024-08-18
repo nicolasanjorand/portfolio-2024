@@ -118,7 +118,7 @@ export default function Links({setIsHovered}) {
                         custom={0}
                         className="perspective-[120px] perspective-origin-top-left flex justify-start"
                     >
-                        <a className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="LINKEDIN"></PerspectiveText></a>
+                        <a target="_blank" href="https://www.linkedin.com/in/nicolasanjorand/" className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="LINKEDIN"></PerspectiveText></a>
                     </motion.div>
                     <motion.div
                         variants={perspective2}
@@ -128,7 +128,7 @@ export default function Links({setIsHovered}) {
                         custom={1}
                         className="perspective-[120px] perspective-origin-top-left flex justify-start"
                     >
-                        <a className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="AWWWARDS"></PerspectiveText></a>
+                        <a target="_blank" href="https://www.awwwards.com/nicolas-anjorand/" className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="AWWWARDS"></PerspectiveText></a>
                     </motion.div>
                     <motion.div
                         variants={perspective2}
@@ -138,7 +138,7 @@ export default function Links({setIsHovered}) {
                         custom={2}
                         className="perspective-[120px] perspective-origin-top-left flex justify-start"
                     >
-                        <a className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="MALT"></PerspectiveText></a>
+                        <a target="_blank" href="https://www.malt.fr/profile/nicolasanjorand" className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="MALT"></PerspectiveText></a>
                     </motion.div>
                     <motion.div
                         variants={perspective2}
@@ -148,7 +148,7 @@ export default function Links({setIsHovered}) {
                         custom={3}
                         className="perspective-[120px] perspective-origin-top-left flex justify-start"
                     >
-                        <a className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="GITHUB"></PerspectiveText></a>
+                        <a target="_blank" href="https://github.com/nicolasanjorand" className="uppercase text-xl group cursor-pointer"><PerspectiveText textColor="text-dark" label="GITHUB"></PerspectiveText></a>
                     </motion.div>
                 </div>
             </div>
