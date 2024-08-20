@@ -316,7 +316,7 @@ const About2 = ({setIsHovered}) => {
         <motion.div className="w-full px-20 bg-dark h-[60vh] relative flex justify-around items-center flex-row gap-5">
             <Image className="w-auto h-full z-20" src={SecondImage} alt="Illustration showing Nicolas ANJORAND on a beach"/>
             <div className="flex justify-around gap-10 items-end flex-col">
-                <SplitText delay={0.12} text="A frenchie in Seattle, searching for a job where I can create amazing digital experiences." className="text-[50px] text-colored text-right" />
+                <SplitText delay={0.12} text="A frenchie in the USA, searching for a job where I can create amazing digital experiences." className="text-[50px] text-colored text-right" />
                 <a href="/NICOLAS_ANJORAND.pdf" target="_blank"><Button className="" text="MY RESUME" setIsHovered={setIsHovered}></Button></a>
             </div>
 
